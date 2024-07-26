@@ -106,7 +106,7 @@
     place-items: center;
     background-color: rgba(0, 0, 0, 0.7);
   }
-  
+
   .winner .text {
     background: #111;
     height: 300px;
@@ -139,6 +139,12 @@
     font-size: 28px;
   }
 
+  .winnerCell{
+    position: relative;
+    color: rebeccapurple; 
+  }
+ 
+
   /*Styles for 3x3 square*/
   .group-0-0 { background-color: var(--color-group-0-0); }
   .group-0-1 { background-color: var(--color-group-0-1); }
@@ -150,8 +156,17 @@
   .group-2-1 { background-color: var(--color-group-2-1); }
   .group-2-2 { background-color: var(--color-group-2-2); }
 
+
+  .group-0-0 + .winnerCell{ background-color: blue }
+  .group-0-1 + .winnerCell{ background-color: blue}
+  .group-0-2 + .winnerCell{ background-color: blue }
+  .group-1-0 + .winnerCell{ background-color: blue}
+  .group-1-2 + .winnerCell{ background-color: blue}
+  .group-2-0 + .winnerCell{ background-color: blue}
+  .group-2-1 + .winnerCell{ background-color: blue}
+  .group-2-2 + .winnerCell{ background-color: blue}
  
 
   .highlight {
-    background-color: var(--color-group-select);
+    opacity: .7;
   }

@@ -7,27 +7,36 @@ function App() {
   const [board, setBoard] = useState(Array(size * size).fill(null));
   const [turn, setTurn] = useState(TURNS.X);
   const [winner, setWinner] = useState(null);
-  const [highlight, setHighlight] = useState([])
+  const [winnerBox, setWinnerBox] = useState([]);
+  const [highlight, setHighlight] = useState(
+    Array.from({ length: 81 }, (_, i) => i)
+  );
+
 
   const nextTurn = (index) => {
     const nextMove = valueGroups[arrayPos[index]];
     setHighlight(nextMove);
-  }
+  };
 
   const updateBoard = (index) => {
     const changeBoard = [...board];
-    if (changeBoard[index] || winner) return;
+
+    if (changeBoard[index] || winner || !highlight.includes(index) || highlight.size > 10)
+      return;
+
     changeBoard[index] = turn;
     setBoard(changeBoard);
-
-    nextTurn(index);
 
     const changeTurn = turn === TURNS.X ? TURNS.O : TURNS.X;
     setTurn(changeTurn);
 
+    nextTurn(index);
+
     const newWinner = checkWinner({ changeBoard });
     if (newWinner) {
-      setWinner(newWinner);
+      newWinner.push(...winnerBox)
+      console.log(newWinner)
+      setWinnerBox(newWinner)
     } else {
       if (checkEndGame({ changeBoard })) {
         setWinner(false);
@@ -40,14 +49,19 @@ function App() {
   };
 
   const checkWinner = ({ changeBoard }) => {
+    let moves = [];
+    let indexs = [];
+    highlight.forEach((i,e) =>{
+      if(changeBoard[i] === turn){
+        moves.push(e);
+      }
+      indexs.push(i);
+    })
+    
     for (const combo of WINNERS_MOVE) {
-      const [a, b, c] = combo;
-      if (
-        changeBoard[a] &&
-        changeBoard[a] === changeBoard[b] &&
-        changeBoard[b] === changeBoard[c]
-      ) {
-        return changeBoard[a];
+      const [a, b, c] = combo
+      if(moves[0] === a && moves[1]=== b && moves[2] ===c){
+        return indexs;
       }
     }
     return null;
@@ -66,15 +80,13 @@ function App() {
     const groupCol = Math.floor(col / 3);
     let className = `group-${groupRow}-${groupCol}`;
 
-    if(highlight.includes(index)){
-      className += ' highlight '
-    }else{
-      className += ' select '
+    if (highlight.includes(index)) {
+      className += " highlight ";
+    } else {
+      className += " select ";
     }
     return className;
   };
-
-
 
   return (
     <>
@@ -89,6 +101,7 @@ function App() {
                   index={index}
                   updateBoard={updateBoard}
                   className={getSquareClass(index)}
+                  winnerClass={winnerBox.includes(index) ? 'winnerCell' : ''}
                 >
                   {info}
                 </Square>

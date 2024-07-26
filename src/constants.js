@@ -43,7 +43,6 @@ function position() {
       }
       count = 0;
     }
-
     arrayPosition[i] = value;
     value++;
     count++;
