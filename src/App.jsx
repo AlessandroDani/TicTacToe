@@ -3,7 +3,9 @@ import Square from "./components/Square";
 import { TURNS, WINNERS_MOVE } from "./constants";
 
 function App() {
-  const [board, setBoard] = useState(Array(9).fill(null));
+  const size = 9;
+  const [board, setBoard] = useState(Array(size*size).fill(null));
+  console.log(board)
   const [turn, setTurn] = useState(TURNS.X);
   const [winner, setWinner] = useState(null);
 
@@ -20,7 +22,7 @@ function App() {
     if (newWinner) {
       setWinner(newWinner);
     } else {
-      if (checkEndGame({changeBoard})) {
+      if (checkEndGame({ changeBoard })) {
         setWinner(false);
       }
     }
@@ -45,9 +47,17 @@ function App() {
   };
 
   const handleRestart = () => {
-    setBoard(Array(9).fill(null));
+    setBoard(Array(size*size).fill(null));
     setWinner(null);
     setTurn(TURNS.X);
+  };
+
+  const getSquareClass = (index) => {
+    const row = Math.floor(index / size);
+    const col = index % size;
+    const groupRow = Math.floor(row / 3);
+    const groupCol = Math.floor(col / 3);
+    return `group-${groupRow}-${groupCol}`;
   };
 
   return (
@@ -58,7 +68,7 @@ function App() {
           {board.map((info, index) => {
             return (
               <>
-                <Square key={index} index={index} updateBoard={updateBoard}>
+                <Square key={index} index={index} updateBoard={updateBoard} className={getSquareClass(index)}>
                   {info}
                 </Square>
               </>
@@ -78,8 +88,7 @@ function App() {
             <div className="text">
               <h2>{winner == false ? "Empate" : "Ganó"}</h2>
               <div className="win">
-                <Square>
-                {winner==false? ":C": winner}</Square>
+                <Square>{winner == false ? ":C" : winner}</Square>
               </div>
               <footer>
                 <button onClick={handleRestart}>Empezar de nuevo</button>

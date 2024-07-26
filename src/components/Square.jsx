@@ -1,17 +1,15 @@
 // eslint-disable-next-line react/prop-types
-function Square({ children, index, isSelected, updateBoard }) {
-  const className = `square ${isSelected ? "is-selected" : ""}`;    
+function Square({ children, index, isSelected, updateBoard, className }) {
+  const select = `${isSelected ? "is-selected" : ""}`
   
   const handleClick = () => {
     updateBoard(index);
   };
 
   return (
-    <>
-      <div className={className} onClick={handleClick}>
+      <div className={`square ${className} ${select}`} onClick={handleClick}>
         {children}
       </div>
-    </>
   );
 }
 
