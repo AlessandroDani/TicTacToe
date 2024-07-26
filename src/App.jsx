@@ -1,19 +1,26 @@
 import { useState } from "react";
 import Square from "./components/Square";
-import { TURNS, WINNERS_MOVE } from "./constants";
+import { TURNS, WINNERS_MOVE, arrayPos, valueGroups } from "./constants";
 
 function App() {
   const size = 9;
-  const [board, setBoard] = useState(Array(size*size).fill(null));
-  console.log(board)
+  const [board, setBoard] = useState(Array(size * size).fill(null));
   const [turn, setTurn] = useState(TURNS.X);
   const [winner, setWinner] = useState(null);
+  const [highlight, setHighlight] = useState([])
+
+  const nextTurn = (index) => {
+    const nextMove = valueGroups[arrayPos[index]];
+    setHighlight(nextMove);
+  }
 
   const updateBoard = (index) => {
     const changeBoard = [...board];
     if (changeBoard[index] || winner) return;
     changeBoard[index] = turn;
     setBoard(changeBoard);
+
+    nextTurn(index);
 
     const changeTurn = turn === TURNS.X ? TURNS.O : TURNS.X;
     setTurn(changeTurn);
@@ -47,7 +54,7 @@ function App() {
   };
 
   const handleRestart = () => {
-    setBoard(Array(size*size).fill(null));
+    setBoard(Array(size * size).fill(null));
     setWinner(null);
     setTurn(TURNS.X);
   };
@@ -57,8 +64,17 @@ function App() {
     const col = index % size;
     const groupRow = Math.floor(row / 3);
     const groupCol = Math.floor(col / 3);
-    return `group-${groupRow}-${groupCol}`;
+    let className = `group-${groupRow}-${groupCol}`;
+
+    if(highlight.includes(index)){
+      className += ' highlight '
+    }else{
+      className += ' select '
+    }
+    return className;
   };
+
+
 
   return (
     <>
@@ -68,7 +84,12 @@ function App() {
           {board.map((info, index) => {
             return (
               <>
-                <Square key={index} index={index} updateBoard={updateBoard} className={getSquareClass(index)}>
+                <Square
+                  key={index}
+                  index={index}
+                  updateBoard={updateBoard}
+                  className={getSquareClass(index)}
+                >
                   {info}
                 </Square>
               </>

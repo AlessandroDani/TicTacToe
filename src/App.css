@@ -22,6 +22,8 @@
     --color-group-2-0: #cc9966; /* Naranja Oscuro */
     --color-group-2-1: #99cc66; /* Lima Oscuro */
     --color-group-2-2: #6699cc; /* Celeste Oscuro */
+
+    --color-group-select: #b9b8b8; /* Celeste Oscuro */
   }
   
   body {
@@ -147,3 +149,9 @@
   .group-2-0 { background-color: var(--color-group-2-0); }
   .group-2-1 { background-color: var(--color-group-2-1); }
   .group-2-2 { background-color: var(--color-group-2-2); }
+
+ 
+
+  .highlight {
+    background-color: var(--color-group-select);
+  }
