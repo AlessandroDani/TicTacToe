@@ -1,13 +1,13 @@
 // eslint-disable-next-line react/prop-types
 function Square({ children, index, isSelected, updateBoard, className, winnerClass }) {
-  const select = `square ${isSelected ? "is-selected" : ""}`;
+  const select = `${isSelected ? "is-selected" : ""}`;
   
   const handleClick = () => {
     updateBoard(index);
   };
 
   if(winnerClass){
-    console.log(index, 'SI')
+    console.log(`square ${className} ${select} ${winnerClass ? "winnerCell" : ""}`)
   }
 
   return (

@@ -157,14 +157,15 @@
   .group-2-2 { background-color: var(--color-group-2-2); }
 
 
-  .group-0-0 + .winnerCell{ background-color: blue }
-  .group-0-1 + .winnerCell{ background-color: blue}
-  .group-0-2 + .winnerCell{ background-color: blue }
-  .group-1-0 + .winnerCell{ background-color: blue}
-  .group-1-2 + .winnerCell{ background-color: blue}
-  .group-2-0 + .winnerCell{ background-color: blue}
-  .group-2-1 + .winnerCell{ background-color: blue}
-  .group-2-2 + .winnerCell{ background-color: blue}
+  .group-0-0.winnerCell{ background-color: blue }
+  .group-0-1.winnerCell{ background-color: blue}
+  .group-0-2.winnerCell{ background-color: blue }
+  .group-1-0.winnerCell{ background-color: blue}
+  .group-1-1.winnerCell{ background-color: blue }
+  .group-1-2.winnerCell{ background-color: blue}
+  .group-2-0.winnerCell{ background-color: blue}
+  .group-2-1.winnerCell{ background-color: blue}
+  .group-2-2.winnerCell{ background-color: blue}
  
 
   .highlight {

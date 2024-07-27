@@ -13,7 +13,7 @@ function App() {
   );
 
 
-  const nextTurn = (index) => {
+  const indexInSquare = (index) => {
     const nextMove = valueGroups[arrayPos[index]];
     setHighlight(nextMove);
   };
@@ -30,7 +30,7 @@ function App() {
     const changeTurn = turn === TURNS.X ? TURNS.O : TURNS.X;
     setTurn(changeTurn);
 
-    nextTurn(index);
+    indexInSquare(index);
 
     const newWinner = checkWinner({ changeBoard });
     if (newWinner) {
@@ -95,7 +95,6 @@ function App() {
         <section className="game">
           {board.map((info, index) => {
             return (
-              <>
                 <Square
                   key={index}
                   index={index}
@@ -105,7 +104,6 @@ function App() {
                 >
                   {info}
                 </Square>
-              </>
             );
           })}
         </section>
