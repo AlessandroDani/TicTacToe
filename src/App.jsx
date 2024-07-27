@@ -11,7 +11,11 @@ function App() {
   const [highlight, setHighlight] = useState(
     Array.from({ length: 81 }, (_, i) => i)
   );
+  const [paintWinnerBox, setPaintWinnerBox] = useState(null);
 
+  const paintBox = (index) => {
+    setPaintWinnerBox(index);
+  };
 
   const indexInSquare = (index) => {
     const nextMove = valueGroups[arrayPos[index]];
@@ -21,7 +25,12 @@ function App() {
   const updateBoard = (index) => {
     const changeBoard = [...board];
 
-    if (changeBoard[index] || winner || !highlight.includes(index) || highlight.size > 10)
+    if (
+      changeBoard[index] ||
+      winner ||
+      !highlight.includes(index) ||
+      highlight.size > 10
+    )
       return;
 
     changeBoard[index] = turn;
@@ -34,9 +43,9 @@ function App() {
 
     const newWinner = checkWinner({ changeBoard });
     if (newWinner) {
-      newWinner.push(...winnerBox)
-      console.log(newWinner)
-      setWinnerBox(newWinner)
+      newWinner.push(...winnerBox);
+      setWinnerBox(newWinner);
+      paintBox(newWinner[4]);
     } else {
       if (checkEndGame({ changeBoard })) {
         setWinner(false);
@@ -51,16 +60,16 @@ function App() {
   const checkWinner = ({ changeBoard }) => {
     let moves = [];
     let indexs = [];
-    highlight.forEach((i,e) =>{
-      if(changeBoard[i] === turn){
+    highlight.forEach((i, e) => {
+      if (changeBoard[i] === turn) {
         moves.push(e);
       }
       indexs.push(i);
-    })
-    
+    });
+
     for (const combo of WINNERS_MOVE) {
-      const [a, b, c] = combo
-      if(moves[0] === a && moves[1]=== b && moves[2] ===c){
+      const [a, b, c] = combo;
+      if (moves[0] === a && moves[1] === b && moves[2] === c) {
         return indexs;
       }
     }
@@ -71,6 +80,9 @@ function App() {
     setBoard(Array(size * size).fill(null));
     setWinner(null);
     setTurn(TURNS.X);
+    setWinnerBox(null)
+    setHighlight(null)
+    setPaintWinnerBox(null)
   };
 
   const getSquareClass = (index) => {
@@ -95,15 +107,16 @@ function App() {
         <section className="game">
           {board.map((info, index) => {
             return (
-                <Square
-                  key={index}
-                  index={index}
-                  updateBoard={updateBoard}
-                  className={getSquareClass(index)}
-                  winnerClass={winnerBox.includes(index) ? 'winnerCell' : ''}
-                >
-                  {info}
-                </Square>
+              <Square
+                key={index}
+                index={index}
+                updateBoard={updateBoard}
+                className={getSquareClass(index)}
+                winnerClass={winnerBox.includes(index) ? "winnerCell" : ""}
+                winnerBox={paintWinnerBox===index ? "pain" : null}
+              >
+                {info}
+              </Square>
             );
           })}
         </section>

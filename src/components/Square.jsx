@@ -1,19 +1,30 @@
 // eslint-disable-next-line react/prop-types
-function Square({ children, index, isSelected, updateBoard, className, winnerClass }) {
-  const select = `${isSelected ? "is-selected" : ""}`;
-  
+function Square({
+  children,
+  index,
+  isSelected,
+  updateBoard,
+  className,
+  winnerClass,
+  winnerBox,
+}) {
+  const selectClassName = `${isSelected ? "is-selected" : ""}`;
+  const winnerClassName = `${winnerClass ? "winnerCell" : ""}`;
+
   const handleClick = () => {
     updateBoard(index);
   };
 
-  if(winnerClass){
-    console.log(`square ${className} ${select} ${winnerClass ? "winnerCell" : ""}`)
-  }
-
   return (
-      <div className={`square ${className} ${select} ${winnerClass ? "winnerCell" : ""}`} onClick={handleClick}>
-        {children}
-      </div>
+    <div
+      className={`square ${className} ${selectClassName} ${winnerClassName} ${winnerBox}`}
+      onClick={handleClick}
+    >
+      {children}
+      {winnerBox && (
+        <img src="/symbol-x.svg" className="winner-image" alt="Winner" />
+      )}
+    </div>
   );
 }
 
