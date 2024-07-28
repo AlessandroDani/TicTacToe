@@ -24,6 +24,8 @@
     --color-group-2-2: #6699cc; /* Celeste Oscuro */
 
     --color-group-select: #b9b8b8; /* Celeste Oscuro */
+    --color-win-x: #09f;
+    --color-win-o:  rgb(253, 90, 90);;
   }
   
   body {
@@ -146,7 +148,6 @@
 
   .winnerCell{
     position: relative;
-    color: rebeccapurple; 
   }
   
   .winner-image {
@@ -172,6 +173,26 @@
   .group-2-0 { background-color: var(--color-group-2-0); }
   .group-2-1 { background-color: var(--color-group-2-1); }
   .group-2-2 { background-color: var(--color-group-2-2); }
+
+  .group-0-0.winX { background-color: var(--color-win-x); }
+  .group-0-1.winX { background-color: var(--color-win-x); }
+  .group-0-2.winX { background-color: var(--color-win-x); }
+  .group-1-0.winX { background-color: var(--color-win-x); }
+  .group-1-1.winX { background-color: var(--color-win-x); }
+  .group-1-2.winX { background-color: var(--color-win-x); }
+  .group-2-0.winX { background-color: var(--color-win-x);}
+  .group-2-1.winX { background-color: var(--color-win-x); }
+  .group-2-2.winX { background-color: var(--color-win-x); }
+
+  .group-0-0.winO { background-color: var(--color-win-o); }
+  .group-0-1.winO { background-color: var(--color-win-o); }
+  .group-0-2.winO { background-color: var(--color-win-o); }
+  .group-1-0.winO { background-color: var(--color-win-o); }
+  .group-1-1.winO { background-color: var(--color-win-o); }
+  .group-1-2.winO { background-color: var(--color-win-o); }
+  .group-2-0.winO { background-color: var(--color-win-o); }
+  .group-2-1.winO { background-color: var(--color-win-o); }
+  .group-2-2.winO { background-color: var(--color-win-o); }
 
  
 

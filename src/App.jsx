@@ -11,19 +11,24 @@ function App() {
   const [highlight, setHighlight] = useState(
     Array.from({ length: 81 }, (_, i) => i)
   );
+  const [colorWinnerCell, setColorWinnerCell] = useState([]);
   const [paintWinnerBox, setPaintWinnerBox] = useState([]);
-  const [indexToPaint, setIndexToPaint] = useState(null);
 
   const paintBox = (index) => {
-    const sum = [...paintWinnerBox] 
-    sum.push(index);
-    console.log(sum)
+    const sum = [...paintWinnerBox];
+    sum[index] = turn;
     setPaintWinnerBox(sum);
-    setIndexToPaint(index);
+    console.log("Estos son los winner: ", colorWinnerCell);
+
+    const paintAll = [...colorWinnerCell];
+    paintAll.push(highlight);
+    //console.log("Estos son los que hay que pintar: ", highlight)
+    setColorWinnerCell(paintAll);
   };
 
   const indexInSquare = (index) => {
     const nextMove = valueGroups[arrayPos[index]];
+    console.log(nextMove);
     setHighlight(nextMove);
   };
 
@@ -85,9 +90,9 @@ function App() {
     setBoard(Array(size * size).fill(null));
     setWinner(null);
     setTurn(TURNS.X);
-    setWinnerBox(null)
-    setHighlight(null)
-    setPaintWinnerBox(null)
+    setWinnerBox(null);
+    setHighlight(null);
+    setPaintWinnerBox(null);
   };
 
   const getSquareClass = (index) => {
@@ -118,7 +123,7 @@ function App() {
                 updateBoard={updateBoard}
                 className={getSquareClass(index)}
                 winnerClass={winnerBox.includes(index) ? "winnerCell" : ""}
-                winnerBox={indexToPaint === index? "pain" : null}
+                winnerBox={paintWinnerBox[index] ? paintWinnerBox[index] : null}
               >
                 {info}
               </Square>
@@ -128,8 +133,8 @@ function App() {
 
         <section className="turn">
           <div style={{ display: "flex", gap: "1rem" }}>
-            <Square isSelected={turn === "X"? "X": null}>X</Square>
-            <Square isSelected={turn === "O"? "O": null}>O</Square>
+            <Square isSelected={turn === "X" ? "X" : null}>X</Square>
+            <Square isSelected={turn === "O" ? "O" : null}>O</Square>
           </div>
         </section>
 
