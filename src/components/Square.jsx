@@ -1,4 +1,3 @@
-// eslint-disable-next-line react/prop-types
 function Square({
   children,
   index,
@@ -8,8 +7,20 @@ function Square({
   winnerClass,
   winnerBox,
 }) {
-  const selectClassName = `${isSelected ? "is-selected" : ""}`;
   const winnerClassName = `${winnerClass ? "winnerCell" : ""}`;
+
+  let selectClassName = "";
+  let turn = "";
+  let img = "";
+  if (isSelected) {
+    selectClassName = isSelected === "X" ? "is-selected-x" : "is-selected-o";
+  }
+
+  if (winnerBox) {
+    turn = isSelected === "X" ? "o" : "x";
+    img = `/symbol-${turn}.svg`;
+    console.log('entra')
+  }
 
   const handleClick = () => {
     updateBoard(index);
@@ -21,9 +32,7 @@ function Square({
       onClick={handleClick}
     >
       {children}
-      {winnerBox && (
-        <img src="/symbol-x.svg" className="winner-image" alt="Winner" />
-      )}
+      {winnerBox && <img src={img} className="winner-image" alt="Winner" />}
     </div>
   );
 }

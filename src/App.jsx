@@ -11,10 +11,15 @@ function App() {
   const [highlight, setHighlight] = useState(
     Array.from({ length: 81 }, (_, i) => i)
   );
-  const [paintWinnerBox, setPaintWinnerBox] = useState(null);
+  const [paintWinnerBox, setPaintWinnerBox] = useState([]);
+  const [indexToPaint, setIndexToPaint] = useState(null);
 
   const paintBox = (index) => {
-    setPaintWinnerBox(index);
+    const sum = [...paintWinnerBox] 
+    sum.push(index);
+    console.log(sum)
+    setPaintWinnerBox(sum);
+    setIndexToPaint(index);
   };
 
   const indexInSquare = (index) => {
@@ -113,7 +118,7 @@ function App() {
                 updateBoard={updateBoard}
                 className={getSquareClass(index)}
                 winnerClass={winnerBox.includes(index) ? "winnerCell" : ""}
-                winnerBox={paintWinnerBox===index ? "pain" : null}
+                winnerBox={indexToPaint === index? "pain" : null}
               >
                 {info}
               </Square>
@@ -123,8 +128,8 @@ function App() {
 
         <section className="turn">
           <div style={{ display: "flex", gap: "1rem" }}>
-            <Square isSelected={turn === TURNS.X}>X</Square>
-            <Square isSelected={turn === TURNS.O}>O</Square>
+            <Square isSelected={turn === "X"? "X": null}>X</Square>
+            <Square isSelected={turn === "O"? "O": null}>O</Square>
           </div>
         </section>
 
