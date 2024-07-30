@@ -29,7 +29,9 @@ function Square({
     updateBoard(index);
   };
 
-  console.log(`square ${className} ${selectClassName} ${winnerClassName} ${winnerBox} ${paintCell}`)
+  const classImage = `winner-image ${paintCell}`;
+
+  //console.log(`square ${className} ${selectClassName} ${winnerClassName} ${winnerBox} ${paintCell}`)
 
   return (
     <div
@@ -37,7 +39,10 @@ function Square({
       onClick={handleClick}
     >
       {children}
-      {winnerBox && <img src={img} className="winner-image" alt="Winner" />}
+      {winnerBox && 
+      <img src={img} className={classImage} alt="Winner" />
+      }
+      
     </div>
   );
 }

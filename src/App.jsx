@@ -11,27 +11,58 @@ function App() {
   const [highlight, setHighlight] = useState(
     Array.from({ length: 81 }, (_, i) => i)
   );
-  const [colorWinnerCell, setColorWinnerCell] = useState([]);
   const [paintWinnerBox, setPaintWinnerBox] = useState([]);
+  const [cellWin, setCellWin] = useState([]);
 
-  const paintBox = (index) => {
+  /**
+   * Identify index where Symbol X or O will be paint,
+   * this index is the center of the 3x3
+   * @param {Integer} index
+   */
+  const paintBox = (middleIndex) => {
     const sum = [...paintWinnerBox];
-    sum[index] = turn;
+    sum[middleIndex] = turn;
+
+    const aux = [...cellWin]
+    const addNextWinnerCell = highlight;
+    console.log("cuanto vale:", addNextWinnerCell)
+    addNextWinnerCell.push(...aux);
+
+    
+    setCellWin(addNextWinnerCell)
     setPaintWinnerBox(sum);
-    console.log("Estos son los winner: ", colorWinnerCell);
-
-    const paintAll = [...colorWinnerCell];
-    paintAll.push(highlight);
-    //console.log("Estos son los que hay que pintar: ", highlight)
-    setColorWinnerCell(paintAll);
+    return addNextWinnerCell
   };
 
-  const indexInSquare = (index) => {
+  /**
+   * Change where the next turn have to play
+   * @param {Integer} index
+   */
+  const indexInSquare = (index, paint) => {
     const nextMove = valueGroups[arrayPos[index]];
-    console.log(nextMove);
-    setHighlight(nextMove);
+    console.log("Aqui esta el valor de valueGroup", nextMove)
+    console.log("Aqui esta el valor de celdas ganadas", cellWin)
+    console.log("Aqui esta el valor de paint", paint)
+    let otherMove = [];
+    if(paint.includes(nextMove[0])){
+      for(let i =0; i < 9; i++){
+        const matriz = valueGroups[i];
+        if(!paint.includes(matriz[0])){
+          otherMove.push(...matriz)
+        }
+      }
+      console.log("puedo jugar en estas posiciones: ", otherMove)
+      return setHighlight(otherMove)
+    }
+    console.log("puedo jugar en estas posiciones: ", otherMove)
+    return setHighlight(nextMove);
   };
 
+  /**
+   * Change the board
+   * @param {Integer} index
+   * @returns
+   */
   const updateBoard = (index) => {
     const changeBoard = [...board];
 
@@ -49,24 +80,37 @@ function App() {
     const changeTurn = turn === TURNS.X ? TURNS.O : TURNS.X;
     setTurn(changeTurn);
 
-    indexInSquare(index);
-
     const newWinner = checkWinner({ changeBoard });
+    let paintNextMove = cellWin
+    console.log("aqui es cuando no verifica si hay ganador", paintNextMove)
     if (newWinner) {
       newWinner.push(...winnerBox);
       setWinnerBox(newWinner);
-      paintBox(newWinner[4]);
+      paintNextMove = paintBox(newWinner[4]);
+      //Aqui debo verificar si hay ganador.
     } else {
       if (checkEndGame({ changeBoard })) {
         setWinner(false);
       }
     }
+
+    indexInSquare(index, paintNextMove);
   };
 
+  /**
+   * Check if the game is over
+   * @param {Array} param0
+   * @returns
+   */
   const checkEndGame = ({ changeBoard }) => {
     return changeBoard.every((value) => value !== null);
   };
 
+  /**
+   * Check if there is a 3x3 winner
+   * @param {Array} param0
+   * @returns indexs where the player won
+   */
   const checkWinner = ({ changeBoard }) => {
     let moves = [];
     let indexs = [];
@@ -77,15 +121,19 @@ function App() {
       indexs.push(i);
     });
 
+    //console.log(moves)
     for (const combo of WINNERS_MOVE) {
       const [a, b, c] = combo;
-      if (moves[0] === a && moves[1] === b && moves[2] === c) {
+      if (moves.includes(a) && moves.includes(b) && moves.includes(c)) {
         return indexs;
       }
     }
     return null;
   };
 
+  /**
+   * Restart the game
+   */
   const handleRestart = () => {
     setBoard(Array(size * size).fill(null));
     setWinner(null);
@@ -95,6 +143,12 @@ function App() {
     setPaintWinnerBox(null);
   };
 
+  /**
+   * Identify all Square in a 3x3
+   * @param {Integer} index
+   * @returns string with a class, if the next move is
+   * in the index
+   */
   const getSquareClass = (index) => {
     const row = Math.floor(index / size);
     const col = index % size;
@@ -113,7 +167,7 @@ function App() {
   return (
     <>
       <main className="board">
-        <h1>Tic Tac Toe</h1>
+        <h1>Ultimate Tic Tac Toe</h1>
         <section className="game">
           {board.map((info, index) => {
             return (
@@ -123,7 +177,7 @@ function App() {
                 updateBoard={updateBoard}
                 className={getSquareClass(index)}
                 winnerClass={winnerBox.includes(index) ? "winnerCell" : ""}
-                winnerBox={paintWinnerBox[index] ? paintWinnerBox[index] : null}
+                winnerBox={paintWinnerBox[index]}
               >
                 {info}
               </Square>

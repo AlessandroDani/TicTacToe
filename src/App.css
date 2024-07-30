@@ -13,6 +13,7 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     -webkit-text-size-adjust: 100%;
+
     --color-group-0-0: #cc6666; /* Rojo Oscuro */
     --color-group-0-1: #66cc66; /* Verde Oscuro */
     --color-group-0-2: #6666cc; /* Azul Oscuro */
@@ -23,9 +24,10 @@
     --color-group-2-1: #99cc66; /* Lima Oscuro */
     --color-group-2-2: #6699cc; /* Celeste Oscuro */
 
-    --color-group-select: #b9b8b8; /* Celeste Oscuro */
+
+    --color-group-select: #b9b8b8; 
     --color-win-x: #09f;
-    --color-win-o:  rgb(253, 90, 90);;
+    --color-win-o:  rgb(253, 90, 90);
   }
   
   body {
@@ -154,13 +156,21 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 250%;
-    height: 250%;
+    width: 310%;
+    height: 310%;
     opacity: 0.7;
     pointer-events: none;
     z-index: 1;
     transform: translate(-50%, -50%);
 }
+
+  .winX{
+    background-color: var(--color-win-x);
+  }
+
+  .winO{
+    background-color: var(--color-win-o);
+  }
 
   
   /*Styles for 3x3 square*/
@@ -174,27 +184,6 @@
   .group-2-1 { background-color: var(--color-group-2-1); }
   .group-2-2 { background-color: var(--color-group-2-2); }
 
-  .group-0-0.winX { background-color: var(--color-win-x); }
-  .group-0-1.winX { background-color: var(--color-win-x); }
-  .group-0-2.winX { background-color: var(--color-win-x); }
-  .group-1-0.winX { background-color: var(--color-win-x); }
-  .group-1-1.winX { background-color: var(--color-win-x); }
-  .group-1-2.winX { background-color: var(--color-win-x); }
-  .group-2-0.winX { background-color: var(--color-win-x);}
-  .group-2-1.winX { background-color: var(--color-win-x); }
-  .group-2-2.winX { background-color: var(--color-win-x); }
-
-  .group-0-0.winO { background-color: var(--color-win-o); }
-  .group-0-1.winO { background-color: var(--color-win-o); }
-  .group-0-2.winO { background-color: var(--color-win-o); }
-  .group-1-0.winO { background-color: var(--color-win-o); }
-  .group-1-1.winO { background-color: var(--color-win-o); }
-  .group-1-2.winO { background-color: var(--color-win-o); }
-  .group-2-0.winO { background-color: var(--color-win-o); }
-  .group-2-1.winO { background-color: var(--color-win-o); }
-  .group-2-2.winO { background-color: var(--color-win-o); }
-
- 
 
   .highlight {
     opacity: .7;
