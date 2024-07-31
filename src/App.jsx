@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Square from "./components/Square";
-import { TURNS, WINNERS_MOVE, arrayPos, valueGroups } from "./constants";
+import { TURNS, WINNERS_MOVE, arrayPos, findPos, valueGroups } from "./constants";
 
 function App() {
   const size = 9;
@@ -12,7 +12,9 @@ function App() {
     Array.from({ length: 81 }, (_, i) => i)
   );
   const [paintWinnerBox, setPaintWinnerBox] = useState([]);
-  const [cellWin, setCellWin] = useState([]);
+  const [cellAllWin, setCellAllWin] = useState([]);
+  const [cellWinX, setCellWinX] = useState([]);
+  const [cellWinO, setCellWinO] = useState([]);
 
   /**
    * Identify index where Symbol X or O will be paint,
@@ -23,13 +25,11 @@ function App() {
     const sum = [...paintWinnerBox];
     sum[middleIndex] = turn;
 
-    const aux = [...cellWin]
-    const addNextWinnerCell = highlight;
-    console.log("cuanto vale:", addNextWinnerCell)
+    const aux = [...cellAllWin]
+    const addNextWinnerCell = valueGroups[findPos[middleIndex]];
     addNextWinnerCell.push(...aux);
-
     
-    setCellWin(addNextWinnerCell)
+    setCellAllWin(addNextWinnerCell)
     setPaintWinnerBox(sum);
     return addNextWinnerCell
   };
@@ -38,23 +38,21 @@ function App() {
    * Change where the next turn have to play
    * @param {Integer} index
    */
-  const indexInSquare = (index, paint) => {
+  const indexInSquare = (index, cellWins) => {
+    console.log("Estas son las celdas ganadoras", cellWins)
     const nextMove = valueGroups[arrayPos[index]];
-    console.log("Aqui esta el valor de valueGroup", nextMove)
-    console.log("Aqui esta el valor de celdas ganadas", cellWin)
-    console.log("Aqui esta el valor de paint", paint)
     let otherMove = [];
-    if(paint.includes(nextMove[0])){
+    if(cellWins.includes(nextMove[0])){
       for(let i =0; i < 9; i++){
         const matriz = valueGroups[i];
-        if(!paint.includes(matriz[0])){
+        if(!cellWins.includes(matriz[0])){
           otherMove.push(...matriz)
         }
       }
-      console.log("puedo jugar en estas posiciones: ", otherMove)
+      console.log("Se mueve en varias direcciones", otherMove)
       return setHighlight(otherMove)
     }
-    console.log("puedo jugar en estas posiciones: ", otherMove)
+    console.log("Siguiente movimeint", nextMove)
     return setHighlight(nextMove);
   };
 
@@ -80,14 +78,17 @@ function App() {
     const changeTurn = turn === TURNS.X ? TURNS.O : TURNS.X;
     setTurn(changeTurn);
 
-    const newWinner = checkWinner({ changeBoard });
-    let paintNextMove = cellWin
-    console.log("aqui es cuando no verifica si hay ganador", paintNextMove)
+    const newWinner = checkWinner({ changeBoard, index });
+    let paintNextMove = cellAllWin
     if (newWinner) {
       newWinner.push(...winnerBox);
       setWinnerBox(newWinner);
       paintNextMove = paintBox(newWinner[4]);
-      //Aqui debo verificar si hay ganador.
+      if(checkWinnerFinalGame(newWinner)){
+        setWinner(true);
+        console.log("nunca")
+        return;
+      }
     } else {
       if (checkEndGame({ changeBoard })) {
         setWinner(false);
@@ -97,6 +98,20 @@ function App() {
     indexInSquare(index, paintNextMove);
   };
 
+  const checkWinnerFinalGame = (lastWinner) =>{
+    if(turn === "X"){
+      const aux = [...cellWinX];
+      aux.push(findPos[lastWinner[0]])
+      setCellWinX(aux);
+      return checkWinnerMove(true ,aux)
+
+    }else{
+      const aux = [...cellWinO];
+      aux.push(findPos[lastWinner[0]])
+      setCellWinO(aux);
+      return checkWinnerMove(true ,aux)
+    }
+  }
   /**
    * Check if the game is over
    * @param {Array} param0
@@ -111,17 +126,21 @@ function App() {
    * @param {Array} param0
    * @returns indexs where the player won
    */
-  const checkWinner = ({ changeBoard }) => {
+  const checkWinner = ({ changeBoard, index}) => {
     let moves = [];
     let indexs = [];
-    highlight.forEach((i, e) => {
-      if (changeBoard[i] === turn) {
-        moves.push(e);
+    const checkSquare = valueGroups[findPos[index]]
+    checkSquare.forEach((value, index) => {
+      if (changeBoard[value] === turn) {
+        moves.push(index);
       }
-      indexs.push(i);
+      indexs.push(value);
     });
 
-    //console.log(moves)
+    return checkWinnerMove(indexs, moves)
+  };
+
+  const checkWinnerMove = (indexs, moves) => {
     for (const combo of WINNERS_MOVE) {
       const [a, b, c] = combo;
       if (moves.includes(a) && moves.includes(b) && moves.includes(c)) {
@@ -129,7 +148,7 @@ function App() {
       }
     }
     return null;
-  };
+  }
 
   /**
    * Restart the game
@@ -138,9 +157,12 @@ function App() {
     setBoard(Array(size * size).fill(null));
     setWinner(null);
     setTurn(TURNS.X);
-    setWinnerBox(null);
-    setHighlight(null);
-    setPaintWinnerBox(null);
+    setHighlight(Array.from({ length: 81 }, (_, i) => i));
+    setPaintWinnerBox([]);
+    setWinnerBox([]);
+    setCellWinO([])
+    setCellWinX([])
+    setCellAllWin([])
   };
 
   /**
@@ -197,7 +219,7 @@ function App() {
             <div className="text">
               <h2>{winner == false ? "Empate" : "Ganó"}</h2>
               <div className="win">
-                <Square>{winner == false ? ":C" : winner}</Square>
+                <Square>{winner == false ? ":C" : turn === "X" ? "O" : "X"}</Square>
               </div>
               <footer>
                 <button onClick={handleRestart}>Empezar de nuevo</button>

@@ -51,4 +51,25 @@ function position() {
   return arrayPosition;
 }
 
+function findPosition (){
+  const arrayPosition = Array(81).fill(null);
+  let count = 0;
+  let value = 0;
+  arrayPosition.forEach((_, i) => {
+    if (count === 3) {
+      if ((i%9 == 0 && i !== 27 && i!==54)) {
+        value -= 2;
+      }else{
+        value++;
+      }
+      count = 0;
+    }
+    arrayPosition[i] = value;
+    count++;
+  });
+
+  return arrayPosition;
+}
+
+export const findPos = findPosition();
 export const arrayPos = position();
