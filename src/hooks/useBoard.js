@@ -3,7 +3,7 @@ import { TURNS } from "../logic/constants";
 import { useCheckMove } from "./useCheckMove";
 import { usePaintBox } from "./usePaintBox";
 import { useHighlight } from "./useHighlight";
-import { switchTurn, shouldUpdateBoard } from "../logic/board";
+import {shouldUpdateBoard, switchTurn} from "../logic/board"
 import { handleNewWinner } from "../logic/game";
 
 export function useBoard() {
@@ -23,32 +23,35 @@ export function useBoard() {
 
     changeBoard[index] = turn;
     setBoard(changeBoard);
+
     setTurn(switchTurn(turn));
 
     const paintNext = checkNextMove(changeBoard, index);
-    indexInSquare({ index, cellWins: paintNext });
+    indexInSquare({ index: index, cellWins: paintNext });
   };
 
-  const checkNextMove = ({ changeBoard, index }) => {
-    const newWinner = checkWinner({ changeBoard, index, turn });
-    if (newWinner) {
-      const { updatedWinnerBox, paintNextMove } = handleNewWinner(
-        newWinner,
-        winnerBox,
-        paint,
-        turn
-      );
-      setWinnerBox(updatedWinnerBox);
+  const checkNextMove = (changeBoard, index) => {
+    const newWinner = checkWinner({
+      changeBoard: changeBoard,
+      index: index,
+      turn: turn,
+    });
+    let paintNextMove = cellAllWin;
 
-      if (checkWinnerFinalGame({ lastWinner: newWinner, turn })) {
+    if (newWinner) {
+      newWinner.push(...winnerBox);
+      setWinnerBox(newWinner);
+      paintNextMove = paint({ middleIndex: newWinner[4], turn: turn });
+      if (checkWinnerFinalGame({ lastWinner: newWinner, turn: turn })) {
         setWinner(true);
         return null;
       }
-      return paintNextMove;
-    } else if (checkEndGame({ changeBoard })) {
-      setWinner(false);
+    } else {
+      if (checkEndGame({ changeBoard: changeBoard })) {
+        setWinner(false);
+      }
     }
-    return cellAllWin;
+    return paintNextMove;
   };
 
   const reset = () => {

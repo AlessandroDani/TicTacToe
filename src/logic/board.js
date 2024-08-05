@@ -1,4 +1,4 @@
-import { TURNS } from "./constants";
+import { TURNS } from "../logic/constants";
 
 export function switchTurn(currentTurn) {
   return currentTurn === TURNS.X ? TURNS.O : TURNS.X;
