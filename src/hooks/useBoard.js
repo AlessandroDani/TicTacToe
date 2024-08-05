@@ -1,8 +1,10 @@
 import { useState } from "react";
-import { TURNS } from "../constants";
+import { TURNS } from "../logic/constants";
 import { useCheckMove } from "./useCheckMove";
 import { usePaintBox } from "./usePaintBox";
 import { useHighlight } from "./useHighlight";
+import { switchTurn, shouldUpdateBoard } from "../logic/board";
+import { handleNewWinner } from "../logic/game";
 
 export function useBoard() {
   const [board, setBoard] = useState(Array(81).fill(null));
@@ -17,46 +19,36 @@ export function useBoard() {
   const updateBoard = (index) => {
     const changeBoard = [...board];
 
-    if (
-      changeBoard[index] ||
-      winner ||
-      !highlight.includes(index) ||
-      highlight.size > 10
-    )
-      return;
+    if (shouldUpdateBoard(changeBoard, winner, highlight, index)) return;
 
     changeBoard[index] = turn;
     setBoard(changeBoard);
-
-    const changeTurn = turn === TURNS.X ? TURNS.O : TURNS.X;
-    setTurn(changeTurn);
+    setTurn(switchTurn(turn));
 
     const paintNext = checkNextMove(changeBoard, index);
-    indexInSquare({ index: index, cellWins: paintNext });
+    indexInSquare({ index, cellWins: paintNext });
   };
 
-  const checkNextMove = (changeBoard, index) => {
-    const newWinner = checkWinner({
-      changeBoard: changeBoard,
-      index: index,
-      turn: turn,
-    });
-    let paintNextMove = cellAllWin;
-
+  const checkNextMove = ({ changeBoard, index }) => {
+    const newWinner = checkWinner({ changeBoard, index, turn });
     if (newWinner) {
-      newWinner.push(...winnerBox);
-      setWinnerBox(newWinner);
-      paintNextMove = paint({ middleIndex: newWinner[4], turn: turn });
-      if (checkWinnerFinalGame({ lastWinner: newWinner, turn: turn })) {
+      const { updatedWinnerBox, paintNextMove } = handleNewWinner(
+        newWinner,
+        winnerBox,
+        paint,
+        turn
+      );
+      setWinnerBox(updatedWinnerBox);
+
+      if (checkWinnerFinalGame({ lastWinner: newWinner, turn })) {
         setWinner(true);
         return null;
       }
-    } else {
-      if (checkEndGame({ changeBoard: changeBoard })) {
-        setWinner(false);
-      }
+      return paintNextMove;
+    } else if (checkEndGame({ changeBoard })) {
+      setWinner(false);
     }
-    return paintNextMove;
+    return cellAllWin;
   };
 
   const reset = () => {

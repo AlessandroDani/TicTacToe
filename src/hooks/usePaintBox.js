@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { valueGroups, findPos } from "../constants";
+import { valueGroups, findPos } from "../logic/constants";
 
 export function usePaintBox() {
   const [paintWinnerBox, setPaintWinnerBox] = useState([]);

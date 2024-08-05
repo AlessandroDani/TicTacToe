@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { valueGroups, arrayPos } from "../constants";
+import { valueGroups, arrayPos } from "../logic/constants";
 
 export function useHighlight() {
   const [highlight, setHighlight] = useState(

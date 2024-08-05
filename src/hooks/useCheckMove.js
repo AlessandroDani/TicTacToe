@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { WINNERS_MOVE, findPos, valueGroups } from "../constants";
+import { WINNERS_MOVE, findPos, valueGroups } from "../logic/constants";
 
 export function useCheckMove() {
   const [cellWinX, setCellWinX] = useState([]);
