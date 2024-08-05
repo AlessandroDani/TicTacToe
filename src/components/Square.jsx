@@ -31,7 +31,8 @@ function Square({
 
   const classImage = `winner-image ${paintCell}`;
 
-  //console.log(`square ${className} ${selectClassName} ${winnerClassName} ${winnerBox} ${paintCell}`)
+  //
+  console.log(`square ${className} ${selectClassName} ${winnerClassName} ${winnerBox} ${paintCell}`)
 
   return (
     <div
