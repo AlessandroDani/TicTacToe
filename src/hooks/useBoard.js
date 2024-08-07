@@ -4,7 +4,6 @@ import { useCheckMove } from "./useCheckMove";
 import { usePaintBox } from "./usePaintBox";
 import { useHighlight } from "./useHighlight";
 import {shouldUpdateBoard, switchTurn} from "../logic/board"
-import { handleNewWinner } from "../logic/game";
 
 export function useBoard() {
   const [board, setBoard] = useState(Array(81).fill(null));
